@@ -5,6 +5,7 @@ import numpy as np
 
 @dataclass
 class LSM:
+    """LSM class"""
     Xs: field(default_factory=list)
     Ys: field(default_factory=list)
     poly_degree: int
@@ -32,7 +33,7 @@ class LSM:
     def create_polynomial(self):
         self.polynomial = np.poly1d(self.a)
 
-    def _crate_plot_data(self):
+    def create_plot_data(self):
         self.create_X_matrix()
         self.create_Y_matrix()
         if self.check_connditions():
@@ -40,6 +41,16 @@ class LSM:
             self.create_polynomial()
             self.x_output = np.linspace(min(self.Xs)-100, max(self.Xs)+100)
             self.y_output = self.polynomial(self.x_output)
+
+    def __repr__(self) -> str:
+        print(self.polynomial)
+        string = f"{self.polynomial.c[0]} · x^{self.poly_degree} "
+        for i in range(1, len(self.polynomial.c)):
+            if self.polynomial.c[i] >= 0: string += f"+{self.polynomial.c[i]} "  
+            else: string += f"{self.polynomial.c[i]} "
+            if i != self.poly_degree:
+                string += f"· x^{self.poly_degree - i} "
+        return string
 
 
 if __name__ == "__main__":
